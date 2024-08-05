@@ -33,4 +33,3 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist  # Change this to your build directory if different
-          cname: yourcustomdomain.com  # Optional: Remove if not using a custom domain
