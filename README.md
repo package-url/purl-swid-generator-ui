@@ -1,4 +1,4 @@
-# PURL SWID Generator (UI)
+# Package URL SWID Generator (UI)
 
 A simple webapp that provides guidance on and creates Package URLs of type "swid".
 
