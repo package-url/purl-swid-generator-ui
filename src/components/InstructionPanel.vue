@@ -67,5 +67,3 @@ td {
   padding: 8px 10px;
 }
 </style>
-<script setup lang="ts">
-</script>
