@@ -71,6 +71,39 @@
                 </button>
               </div>
             </div>
+
+            <div class="form-group">
+              <label for="patch">Patch</label>
+              <div class="input-refresh-wrapper">
+                <select v-model="form.patch" id="patch">
+                  <option :value="true">True</option>
+                  <option :value="false">False</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="tagId">TAG VERSION</label>
+              <div class="input-refresh-wrapper">
+                <input
+                    type="number"
+                    id="tagId"
+                    v-model="form.tagVersion"
+                    required
+                    readonly
+                    @input="validateField('tagId')"
+                    :class="{'invalid-input': !form.tagId}"
+                >
+                <button type="button" @click="decrementTagVersion" class="refresh-button">
+                  <i class="fas fa-minus" style="color:#26c1c9"></i>
+                </button>
+                <button type="button" @click="incrementTagVersion" class="refresh-button">
+                  <i class="fas fa-plus" style="color:#26c1c9"></i>
+                </button>
+              </div>
+            </div>
+
+
           </template>
         </vue-collapsible-panel>
         <vue-collapsible-panel :expanded="false">
@@ -134,6 +167,8 @@ export default {
         regId: 'example.com',
         tagCreatorName: '',
         tagRegId: '',
+        tagVersion: 0,
+        patch: false
       },
       isRegIdValid: true,
       isTagRegIdValid: true,
@@ -208,9 +243,25 @@ export default {
         qualifiers.tag_creator_regid = this.form.tagRegId;
       }
 
+      if (this.form.patch === true) {
+        qualifiers.patch = this.form.patch;
+      }
+
+      if (this.form.tagVersion > 0) {
+        qualifiers.tag_version = this.form.tagVersion;
+      }
+
       const purl = new PackageURL('swid', namespace, this.form.name, this.form.version, qualifiers, null);
       this.packageUrl = purl.toString();
-    }
+    },
+    incrementTagVersion() {
+      this.form.tagVersion += 1;
+    },
+    decrementTagVersion() {
+      if (this.form.tagVersion > 0) {
+        this.form.tagVersion -= 1;
+      }
+    },
   },
 };
 </script>
@@ -244,7 +295,7 @@ export default {
   color: #A9C7DF;
 }
 .form-group input,
-.form-group textarea {
+.form-group textarea, select {
   width: 100%;
   padding: 10px;
   background-color: #222C3C;
@@ -254,7 +305,8 @@ export default {
   transition: border-color 0.3s ease-in-out;
 }
 .form-group input:focus,
-.form-group textarea:focus {
+.form-group textarea:focus,
+.form-group select:focus {
   border-color: #0093EE;
   outline: none;
 }
@@ -262,7 +314,7 @@ export default {
   display: flex;
   align-items: center;
 }
-.input-refresh-wrapper input {
+.input-refresh-wrapper input, .input-refresh-wrapper select {
   flex-grow: 1;
 }
 .input-refresh-wrapper button {
